@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Exchange</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4e4ba;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 1rem;
+            min-height: 66vh;
+            width: 40vh;
+        }
+        input {
+            width: 38vh;
+        }
+        .select-container,
+        .select-container1 {
+            display: flex;
+            align-items: center;
+        }
+        .select-container img,
+        .select-container1 img {
+            margin-right: 10px;
+            margin-left: 20px;
+            width: 40px;
+            height: 40px;
+        }
+        .dropdown {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            margin-left: 0px;
+            margin-right: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 0.3rem;
+            font-size: 12px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+        }
+        .msg {
+            font-size: 14px;
+            margin-bottom: 10px;
+            margin-left: 70px;
+        }
+        #btn {
+            background-color: #1c9c21;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 18px;
+        }
+        #swap {
+            margin-top: 10px; 
+            padding: 8px 12px; 
+            border-radius: 50px;
+            color: #d0f3f9;
+            cursor: pointer;
+            font-size: 14px;
+            background-color: rgb(96, 96, 215);
+            margin-left: 80px;
+        }
+    </style>
+    <script>
+      const countryList = {
+        Afghanistan: { code: "AFN", flag: "AF" },
+        Albania: { code: "ALL", flag: "AL" },
+        Algeria: { code: "DZD", flag: "DZ" },
+        Andorra: { code: "EUR", flag: "AD" },
+        Angola: { code: "AOA", flag: "AO" },
+        Antigua_and_Barbuda: { code: "XCD", flag: "AG" },
+        Argentina: { code: "ARS", flag: "AR" },
+        Armenia: { code: "AMD", flag: "AM" },
+        Australia: { code: "AUD", flag: "AU" },
+        Austria: { code: "EUR", flag: "AT" },
+        Azerbaijan: { code: "AZN", flag: "AZ" },
+        Bahamas: { code: "BSD", flag: "BS" },
+        Bahrain: { code: "BHD", flag: "BH" },
+        Bangladesh: { code: "BDT", flag: "BD" },
+        Barbados: { code: "BBD", flag: "BB" },
+        Belarus: { code: "BYN", flag: "BY" },
+        Belgium: { code: "EUR", flag: "BE" },
+        Belize: { code: "BZD", flag: "BZ" },
+        Benin: { code: "XOF", flag: "BJ" },
+        Bhutan: { code: "BTN", flag: "BT" },
+        Bolivia: { code: "BOB", flag: "BO" },
+        Bosnia_and_Herzegovina: { code: "BAM", flag: "BA" },
+        Botswana: { code: "BWP", flag: "BW" },
+        Brazil: { code: "BRL", flag: "BR" },
+        Brunei: { code: "BND", flag: "BN" },
+        Bulgaria: { code: "BGN", flag: "BG" },
+        Burkina_Faso: { code: "XOF", flag: "BF" },
+        Burundi: { code: "BIF", flag: "BI" },
+        Cabo_Verde: { code: "CVE", flag: "CV" },
+        Cambodia: { code: "KHR", flag: "KH" },
+        Cameroon: { code: "XAF", flag: "CM" },
+        Canada: { code: "CAD", flag: "CA" },
+        Central_African_Republic: { code: "XAF", flag: "CF" },
+        Chad: { code: "XAF", flag: "TD" },
+        Chile: { code: "CLP", flag: "CL" },
+        China: { code: "CNY", flag: "CN" },
+        Colombia: { code: "COP", flag: "CO" },
+        Comoros: { code: "KMF", flag: "KM" },
+        Congo_Democratic_Republic: { code: "CDF", flag: "CD" },
+        Congo_Republic: { code: "XAF", flag: "CG" },
+        Costa_Rica: { code: "CRC", flag: "CR" },
+        Croatia: { code: "HRK", flag: "HR" },
+        Cuba: { code: "CUP", flag: "CU" },
+        Cyprus: { code: "EUR", flag: "CY" },
+        Czech_Republic: { code: "CZK", flag: "CZ" },
+        Denmark: { code: "DKK", flag: "DK" },
+        Djibouti: { code: "DJF", flag: "DJ" },
+        Dominica: { code: "XCD", flag: "DM" },
+        Dominican_Republic: { code: "DOP", flag: "DO" },
+        East_Timor: { code: "USD", flag: "TL" },
+        Ecuador: { code: "USD", flag: "EC" },
+        Egypt: { code: "EGP", flag: "EG" },
+        El_Salvador: { code: "USD", flag: "SV" },
+        Equatorial_Guinea: { code: "XAF", flag: "GQ" },
+        Eritrea: { code: "ERN", flag: "ER" },
+        Estonia: { code: "EUR", flag: "EE" },
+        Eswatini: { code: "SZL", flag: "SZ" },
+        Ethiopia: { code: "ETB", flag: "ET" },
+        Fiji: { code: "FJD", flag: "FJ" },
+        Finland: { code: "EUR", flag: "FI" },
+        France: { code: "EUR", flag: "FR" },
+        Gabon: { code: "XAF", flag: "GA" },
+        Gambia: { code: "GMD", flag: "GM" },
+        Georgia: { code: "GEL", flag: "GE" },
+        Germany: { code: "EUR", flag: "DE" },
+        Ghana: { code: "GHS", flag: "GH" },
+        Greece: { code: "EUR", flag: "GR" },
+        Greenland: { code: "DKK", flag: "GL" },
+        Grenada: { code: "XCD", flag: "GD" },
+        Guatemala: { code: "GTQ", flag: "GT" },
+        Guinea: { code: "GNF", flag: "GN" },
+        Guinea_Bissau: { code: "XOF", flag: "GW" },
+        Guyana: { code: "GYD", flag: "GY" },
+        Haiti: { code: "HTG", flag: "HT" },
+        Honduras: { code: "HNL", flag: "HN" },
+        Hungary: { code: "HUF", flag: "HU" },
+        Iceland: { code: "ISK", flag: "IS" },
+        India: { code: "INR", flag: "IN" },
+        Indonesia: { code: "IDR", flag: "ID" },
+        Iran: { code: "IRR", flag: "IR" },
+        Iraq: { code: "IQD", flag: "IQ" },
+        Ireland: { code: "EUR", flag: "IE" },
+        Israel: { code: "ILS", flag: "IL" },
+        Italy: { code: "EUR", flag: "IT" },
+        Jamaica: { code: "JMD", flag: "JM" },
+        Japan: { code: "JPY", flag: "JP" },
+        Jordan: { code: "JOD", flag: "JO" },
+        Kazakhstan: { code: "KZT", flag: "KZ" },
+        Kenya: { code: "KES", flag: "KE" },
+        Kiribati: { code: "AUD", flag: "KI" },
+        Korea_North: { code: "KPW", flag: "KP" },
+        Korea_South: { code: "KRW", flag: "KR" },
+        Kosovo: { code: "EUR", flag: "XK" },
+        Kuwait: { code: "KWD", flag: "KW" },
+        Kyrgyzstan: { code: "KGS", flag: "KG" },
+        Laos: { code: "LAK", flag: "LA" },
+        Latvia: { code: "EUR", flag: "LV" },
+        Lebanon: { code: "LBP", flag: "LB" },
+        Lesotho: { code: "LSL", flag: "LS" },
+        Liberia: { code: "LRD", flag: "LR" },
+        Libya: { code: "LYD", flag: "LY" },
+        Liechtenstein: { code: "CHF", flag: "LI" },
+        Lithuania: { code: "EUR", flag: "LT" },
+        Luxembourg: { code: "EUR", flag: "LU" },
+        Madagascar: { code: "MGA", flag: "MG" },
+        Malawi: { code: "MWK", flag: "MW" },
+        Malaysia: { code: "MYR", flag: "MY" },
+        Maldives: { code: "MVR", flag: "MV" },
+        Mali: { code: "XOF", flag: "ML" },
+        Malta: { code: "EUR", flag: "MT" },
+        Marshall_Islands: { code: "USD", flag: "MH" },
+        Mauritania: { code: "MRU", flag: "MR" },
+        Mauritius: { code: "MUR", flag: "MU" },
+        Mexico: { code: "MXN", flag: "MX" },
+        Micronesia: { code: "USD", flag: "FM" },
+        Moldova: { code: "MDL", flag: "MD" },
+        Monaco: { code: "EUR", flag: "MC" },
+        Mongolia: { code: "MNT", flag: "MN" },
+        Montenegro: { code: "EUR", flag: "ME" },
+        Morocco: { code: "MAD", flag: "MA" },
+        Mozambique: { code: "MZN", flag: "MZ" },
+        Myanmar: { code: "MMK", flag: "MM" },
+        Namibia: { code: "NAD", flag: "NA" },
+        Nauru: { code: "AUD", flag: "NR" },
+        Nepal: { code: "NPR", flag: "NP" },
+        Netherlands: { code: "EUR", flag: "NL" },
+        New_Zealand: { code: "NZD", flag: "NZ" },
+        Nicaragua: { code: "NIO", flag: "NI" },
+        Niger: { code: "XOF", flag: "NE" },
+        Nigeria: { code: "NGN", flag: "NG" },
+        North_Macedonia: { code: "MKD", flag: "MK" },
+        Norway: { code: "NOK", flag: "NO" },
+        Oman: { code: "OMR", flag: "OM" },
+        Pakistan: { code: "PKR", flag: "PK" },
+        Palau: { code: "USD", flag: "PW" },
+        Panama: { code: "PAB", flag: "PA" },
+        Papua_New_Guinea: { code: "PGK", flag: "PG" },
+        Paraguay: { code: "PYG", flag: "PY" },
+        Peru: { code: "PEN", flag: "PE" },
+        Philippines: { code: "PHP", flag: "PH" },
+        Poland: { code: "PLN", flag: "PL" },
+        Portugal: { code: "EUR", flag: "PT" },
+        Qatar: { code: "QAR", flag: "QA" },
+        Romania: { code: "RON", flag: "RO" },
+        Russia: { code: "RUB", flag: "RU" },
+        Rwanda: { code: "RWF", flag: "RW" },
+        Saint_Kitts_and_Nevis: { code: "XCD", flag: "KN" },
+        Saint_Lucia: { code: "XCD", flag: "LC" },
+        Saint_Vincent_and_the_Grenadines: { code: "XCD", flag: "VC" },
+        Samoa: { code: "WST", flag: "WS" },
+        San_Marino: { code: "EUR", flag: "SM" },
+        Sao_Tome_and_Principe: { code: "STN", flag: "ST" },
+        Saudi_Arabia: { code: "SAR", flag: "SA" },
+        Senegal: { code: "XOF", flag: "SN" },
+        Serbia: { code: "RSD", flag: "RS" },
+        Seychelles: { code: "SCR", flag: "SC" },
+        Sierra_Leone: { code: "SLL", flag: "SL" },
+        Singapore: { code: "SGD", flag: "SG" },
+        Slovakia: { code: "EUR", flag: "SK" },
+        Slovenia: { code: "EUR", flag: "SI" },
+        Solomon_Islands: { code: "SBD", flag: "SB" },
+        Somalia: { code: "SOS", flag: "SO" },
+        South_Africa: { code: "ZAR", flag: "ZA" },
+        South_Sudan: { code: "SSP", flag: "SS" },
+        Spain: { code: "EUR", flag: "ES" },
+        Sri_Lanka: { code: "LKR", flag: "LK" },
+        Sudan: { code: "SDG", flag: "SD" },
+        Suriname: { code: "SRD", flag: "SR" },
+        Sweden: { code: "SEK", flag: "SE" },
+        Switzerland: { code: "CHF", flag: "CH" },
+        Syria: { code: "SYP", flag: "SY" },
+        Taiwan: { code: "TWD", flag: "TW" },
+        Tajikistan: { code: "TJS", flag: "TJ" },
+        Tanzania: { code: "TZS", flag: "TZ" },
+        Thailand: { code: "THB", flag: "TH" },
+        Togo: { code: "XOF", flag: "TG" },
+        Tonga: { code: "TOP", flag: "TO" },
+        Trinidad_and_Tobago: { code: "TTD", flag: "TT" },
+        Tunisia: { code: "TND", flag: "TN" },
+        Turkey: { code: "TRY", flag: "TR" },
+        Turkmenistan: { code: "TMT", flag: "TM" },
+        Tuvalu: { code: "AUD", flag: "TV" },
+        Uganda: { code: "UGX", flag: "UG" },
+        Ukraine: { code: "UAH", flag: "UA" },
+        United_Arab_Emirates: { code: "AED", flag: "AE" },
+        United_Kingdom: { code: "GBP", flag: "GB" },
+        United_States: { code: "USD", flag: "US" },
+        Uruguay: { code: "UYU", flag: "UY" },
+        Uzbekistan: { code: "UZS", flag: "UZ" },
+        Vanuatu: { code: "VUV", flag: "VU" },
+        Vatican_City: { code: "EUR", flag: "VA" },
+        Venezuela: { code: "VES", flag: "VE" },
+        Vietnam: { code: "VND", flag: "VN" },
+        Yemen: { code: "YER", flag: "YE" },
+        Zambia: { code: "ZMW", flag: "ZM" },
+        Zimbabwe: { code: "ZWL", flag: "ZW" },
+      };
+      const BASE_URL =`https://currency-exchange.p.rapidapi.com/listquotes`;
+      document.addEventListener("DOMContentLoaded", function() {
+        const dropdowns = document.querySelectorAll(".option"); 
+        dropdowns.forEach(dropdown => {
+          for (var key in countryList) {      
+            var option = document.createElement("option");
+            option.value = key;
+            option.text = `${key} - ${countryList[key].code}`;
+            dropdown.add(option);
+          }
+          dropdown.addEventListener('click',function(){
+            updateFlag(dropdown);
+          });
+        });
+        function updateFlag(dropdown){
+          const code = dropdown.value;
+          const flagImgFrom = document.querySelector(".select-container img");
+          const flagImgTo = document.querySelector(".select-container1 img");
+          if(dropdown.closest(".from")){
+            flagImgFrom.src = `https://flagsapi.com/${countryList[code].flag}/flat/64.png`;
+          }
+          else if(dropdown.closest(".to")){
+            flagImgTo.src = `https://flagsapi.com/${countryList[code].flag}/flat/64.png`;
+          }
+        }
+        const btn = document.querySelector("form button");
+        const fromCurr = document.querySelector(".from select");
+        const toCurr = document.querySelector(".to select");
+        const msg = document.querySelector(".msg");
+        const updateExchangeRate = async()=>{
+          amount = document.querySelector(".amount input");
+          amtVal = amount.value;
+          if(amtVal === ""|| amtVal < 1){
+            amtVal = 1;
+            amount.value = "1";
+          }
+          const URL = `${BASE_URL}/${countryList[fromCurr.value].code.toLowerCase()}/${countryList[toCurr.value].code.toLowerCase()}.json`;
+          let response = await fetch(URL);
+          let data = await response.json();
+          let rate = data[countryList[toCurr.value].code.toLowerCase()];
+          let finalAmt = amtVal*rate;
+          msg.innerText = `${amtVal} ${countryList[fromCurr.value].code} = ${finalAmt} ${countryList[toCurr.value].code}`;
+        }
+        btn.addEventListener("click", (evt) => {
+          evt.preventDefault();
+          updateExchangeRate();
+        });
+        window.addEventListener("load", () => {
+          updateExchangeRate();
+        });
+        document.getElementById("swap").addEventListener("click",(e)=>{
+          e.preventDefault();
+          swapCurrency();
+          updateFlag();
+        });
+        function swapCurrency() {
+          const fromCurr = document.querySelector(".from select");
+          const toCurr = document.querySelector(".to select");
+          const temp = fromCurr.value;
+          fromCurr.value = toCurr.value;
+          toCurr.value = temp;
+          updateFlag(fromCurr);
+          updateFlag(toCurr);
+        }
+      });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Currency Exchange</h2>
+        <form>
+            <div class="amount">
+              <p>Enter Amount</p>
+              <input type="text" placeholder="100"/>
+            </div>
+            <div class="dropdown">
+              <div class="from">
+                <p>From</p>
+                <div class="select-container">
+                  <img src="https://flagsapi.com/US/flat/64.png" />
+                  <select class="option"></select>
+                </div>
+              </div>
+              <div class="to">
+                <p>To</p>
+                <div class="select-container1">
+                  <img src="https://flagsapi.com/AU/flat/64.png" />
+                  <select class="option"></select>
+                </div>
+              </div>
+            </div>
+            <div class="msg">1USD = 80INR</div>
+            <button id="btn">Get Converted Amount</button>
+            <button id="swap">Swap</button>
+          </form>
+    </div>
+</body>
+</html>
